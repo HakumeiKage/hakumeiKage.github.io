@@ -1,0 +1,51 @@
+video: https://www.youtube.com/watch?v=i8zPbakOthM
+time: done
+
+playlist: https://www.youtube.com/watch?v=ng-JK4w4mAQ&list=PLA9oyBlTfuChvLpjreFX2SA7sqSw0YYze&index=4
+
+icons website: https://boxicons.com/
+icons website must add: https://docs.boxicons.com/font
+current page: https://boxicons.com/icons/user?w=normal&s=regular&p=basic&free=true&f=true&q=user
+
+e-commerce: https://www.youtube.com/watch?v=IwTCis0-Nfc
+
+
+add to phpadmin
+
+-- Add is_admin column to users table
+ALTER TABLE users ADD COLUMN is_admin BOOLEAN DEFAULT FALSE;
+
+-- Create products table
+CREATE TABLE products (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    description TEXT,
+    image_path VARCHAR(255),
+    category VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create orders table
+CREATE TABLE orders (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    customer_name VARCHAR(255) NOT NULL,
+    customer_email VARCHAR(255) NOT NULL,
+    total_amount DECIMAL(10, 2) NOT NULL,
+    status ENUM('pending', 'processing', 'completed', 'cancelled') DEFAULT 'pending',
+    order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    shipping_address TEXT,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- Create order_items table
+CREATE TABLE order_items (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT,
+    product_id INT,
+    quantity INT NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (order_id) REFERENCES orders(id),
+    FOREIGN KEY (product_id) REFERENCES products(id)
+);
